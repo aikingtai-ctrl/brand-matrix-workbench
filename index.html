@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet" />
+  <title>品牌视觉锤与商标矩阵交互选型台（适老大字版）</title>
+  <style>
+    :root {
+      --bg: #FAF9F5;
+      --card: #FFFFFF;
+      --surface-warm: #F3EFE6;
+      --ink: #18181B;
+      --ink-sub: #3F3F46;
+      --border: #D6D0C4;
+      --seal: #C83E2B;
+      --seal-soft: #FDF1EE;
+      --ok: #146C43;
+      --ok-bg: #EBF7F0;
+      --warn: #9A3412;
+      --warn-bg: #FFF3ED;
+      --accent-dark: #1F2937;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: "Microsoft YaHei", "PingFang SC", "Noto Sans SC", system-ui, sans-serif;
+      font-size: 20.5px;
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 1260px;
+      margin: 0 auto;
+      padding: 28px 24px 64px;
+    }
+
+    header.hero {
+      background: var(--card);
+      border: 2px solid var(--ink);
+      border-radius: 14px;
+      padding: 28px 32px;
+      margin-bottom: 26px;
+    }
+
+    .hero-top {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+
+    .badge-seal {
+      display: inline-block;
+      background: var(--seal);
+      color: #FFFFFF;
+      font-weight: 700;
+      font-size: 18.5px;
+      padding: 6px 14px;
+      border-radius: 6px;
+      letter-spacing: 0.04em;
+    }
+
+    .hero h1 {
+      margin: 0 0 10px;
+      font-size: 32px;
+      line-height: 1.28;
+      font-weight: 800;
+      color: var(--ink);
+    }
+
+    .hero p {
+      margin: 0;
+      font-size: 20.5px;
+      color: var(--ink-sub);
+    }
+
+    /* Switcher */
+    .switcher-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 28px;
+      position: sticky;
+      top: 10px;
+      z-index: 30;
+      background: rgba(250, 249, 245, 0.94);
+      padding: 10px 0;
+    }
+
+    .brand-tab {
+      background: var(--card);
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      padding: 16px 18px;
+      text-align: left;
+      cursor: pointer;
+      transition: transform 0.12s ease, border-color 0.12s ease, background 0.12s ease;
+      font-family: inherit;
+      color: var(--ink);
+    }
+
+    .brand-tab:hover {
+      border-color: var(--ink);
+      transform: translateY(-2px);
+    }
+
+    .brand-tab.active {
+      background: var(--ink);
+      color: #FFFFFF;
+      border-color: var(--ink);
+      box-shadow: 0 8px 20px rgba(24, 24, 27, 0.14);
+    }
+
+    .brand-tab .tab-tag {
+      display: inline-block;
+      font-size: 18.5px;
+      font-weight: 700;
+      padding: 2px 10px;
+      border-radius: 999px;
+      background: var(--seal-soft);
+      color: var(--seal);
+      margin-bottom: 8px;
+    }
+
+    .brand-tab.active .tab-tag {
+      background: var(--seal);
+      color: #FFFFFF;
+    }
+
+    .brand-tab .tab-zh {
+      display: block;
+      font-size: 26px;
+      font-weight: 800;
+      line-height: 1.25;
+    }
+
+    .brand-tab .tab-en {
+      display: block;
+      font-size: 19px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      opacity: 0.92;
+      margin-top: 2px;
+    }
+
+    .panel {
+      background: var(--card);
+      border: 2px solid var(--border);
+      border-radius: 14px;
+      padding: 28px 32px;
+      margin-bottom: 28px;
+    }
+
+    .section-title {
+      margin: 0 0 18px;
+      font-size: 26px;
+      font-weight: 800;
+      border-left: 7px solid var(--seal);
+      padding-left: 14px;
+      line-height: 1.3;
+    }
+
+    /* Stage 1: Storefront + Seal + Verification */
+    .stage-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 1fr;
+      gap: 24px;
+      align-items: stretch;
+    }
+
+    .storefront-box {
+      background: #EAE5DA;
+      border: 2px solid var(--ink);
+      border-radius: 12px;
+      padding: 26px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .signboard {
+      background: #FFFFFF;
+      border: 2px solid var(--ink);
+      border-radius: 10px;
+      padding: 26px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 18px;
+    }
+
+    .signboard-text .zh-lockup {
+      font-size: 38px;
+      font-weight: 900;
+      letter-spacing: 0.14em;
+      line-height: 1.2;
+      color: var(--ink);
+    }
+
+    .signboard-text .en-lockup {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: 0.24em;
+      color: var(--ink-sub);
+      margin-top: 6px;
+    }
+
+    .seal-box {
+      width: 106px;
+      height: 106px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .trademark-split-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .split-chip {
+      background: var(--card);
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 14px;
+      text-align: center;
+    }
+
+    .split-chip .chip-label {
+      display: block;
+      font-size: 18.5px;
+      color: var(--ink-sub);
+      font-weight: 700;
+    }
+
+    .split-chip .chip-val {
+      display: block;
+      font-size: 21px;
+      font-weight: 800;
+      color: var(--ink);
+      margin-top: 4px;
+    }
+
+    .meta-box {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .formula-card {
+      background: var(--surface-warm);
+      border-radius: 10px;
+      padding: 18px 20px;
+      border: 1.5px solid var(--border);
+    }
+
+    .formula-card strong {
+      font-size: 21px;
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .speech-hammer {
+      background: var(--seal-soft);
+      border: 2px solid var(--seal);
+      border-radius: 10px;
+      padding: 18px 20px;
+    }
+
+    .speech-hammer .hammer-label {
+      font-size: 18.5px;
+      font-weight: 800;
+      color: var(--seal);
+      margin-bottom: 6px;
+      display: block;
+    }
+
+    .speech-hammer .hammer-text {
+      font-size: 21.5px;
+      font-weight: 700;
+      color: var(--ink);
+    }
+
+    .badges-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .verify-pill {
+      font-size: 18.5px;
+      font-weight: 700;
+      padding: 8px 14px;
+      border-radius: 8px;
+      border: 1.5px solid;
+    }
+
+    .verify-pill.ok {
+      background: var(--ok-bg);
+      color: var(--ok);
+      border-color: #93D2B1;
+    }
+
+    .verify-pill.notice {
+      background: var(--warn-bg);
+      color: var(--warn);
+      border-color: #FDBA8C;
+    }
+
+    /* Stage 2: 3-Phase Packaging Mockups */
+    .pkg-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 18px;
+      background: var(--surface-warm);
+      padding: 14px 20px;
+      border-radius: 10px;
+    }
+
+    .peel-btn {
+      background: var(--seal);
+      color: #FFFFFF;
+      border: none;
+      border-radius: 8px;
+      padding: 12px 22px;
+      font-size: 20px;
+      font-weight: 800;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .peel-btn.peeled {
+      background: var(--ink);
+    }
+
+    .pkg-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .pkg-card {
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      background: #FFFFFF;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .pkg-phase-tag {
+      font-size: 18.5px;
+      font-weight: 800;
+      color: var(--seal);
+      margin-bottom: 10px;
+    }
+
+    .mockup-box {
+      border: 2px solid var(--ink);
+      border-radius: 10px;
+      min-height: 245px;
+      position: relative;
+      overflow: hidden;
+      background: #F6F4EE;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+
+    .mockup-inner-brand {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .mockup-inner-brand .m-zh {
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+    }
+
+    .mockup-inner-brand .m-en {
+      font-size: 18.5px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      color: var(--ink-sub);
+    }
+
+    .mockup-body-spec {
+      font-size: 19px;
+      color: var(--ink);
+      font-weight: 700;
+      padding-top: 12px;
+      border-top: 1.5px solid #D5CFC2;
+    }
+
+    .clip-belly-band {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 16px;
+      background: #C83E2B;
+      color: #FFFFFF;
+      padding: 14px 16px;
+      border-top: 2px solid var(--ink);
+      border-bottom: 2px solid var(--ink);
+      transition: transform 0.25s ease, opacity 0.25s ease;
+    }
+
+    .clip-belly-band.hidden {
+      transform: translateX(108%);
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .clip-belly-band strong {
+      display: block;
+      font-size: 20px;
+      line-height: 1.3;
+    }
+
+    .clip-belly-band span {
+      display: block;
+      font-size: 18.5px;
+      margin-top: 4px;
+    }
+
+    .ip-collab-box {
+      background: #FFF9ED;
+    }
+
+    .ip-pill {
+      display: inline-block;
+      background: var(--ink);
+      color: #FFFFFF;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 19px;
+      font-weight: 800;
+      margin-top: 8px;
+    }
+
+    /* Calculator */
+    .calc-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--surface-warm);
+      border: 2px solid var(--ink);
+      border-radius: 12px;
+      padding: 20px 24px;
+      margin-bottom: 20px;
+    }
+
+    .mark-toggles {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .toggle-pill {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--card);
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 16px;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 19.5px;
+    }
+
+    .toggle-pill input {
+      width: 22px;
+      height: 22px;
+      accent-color: var(--seal);
+    }
+
+    .fee-summary {
+      text-align: right;
+    }
+
+    .fee-summary .fee-num {
+      font-size: 32px;
+      font-weight: 900;
+      color: var(--seal);
+      display: block;
+      line-height: 1.2;
+    }
+
+    .fee-summary .fee-formula {
+      font-size: 18.5px;
+      font-weight: 700;
+      color: var(--ink-sub);
+    }
+
+    .trap-alert {
+      background: var(--seal-soft);
+      border-left: 7px solid var(--seal);
+      padding: 16px 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .class-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .class-card {
+      border: 2px solid var(--border);
+      border-radius: 10px;
+      padding: 16px 18px;
+      background: var(--card);
+      cursor: pointer;
+      transition: border-color 0.12s ease, background 0.12s ease;
+    }
+
+    .class-card.selected {
+      border-color: var(--ink);
+      background: #FCFBF8;
+      box-shadow: inset 0 0 0 1px var(--ink);
+    }
+
+    .class-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .class-head label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 21px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .class-head input {
+      width: 22px;
+      height: 22px;
+      accent-color: var(--seal);
+    }
+
+    .phase-tag {
+      font-size: 18.5px;
+      font-weight: 700;
+      padding: 2px 10px;
+      border-radius: 6px;
+      background: var(--surface-warm);
+      color: var(--ink);
+    }
+
+    .phase-tag.core {
+      background: var(--seal);
+      color: #FFFFFF;
+    }
+
+    .class-items {
+      font-size: 18.5px;
+      color: var(--ink-sub);
+      margin: 6px 0 0;
+    }
+
+    /* Rejected grid */
+    .rejected-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    .reject-card {
+      border: 2px solid #E5C5BC;
+      background: #FFF9F7;
+      border-radius: 10px;
+      padding: 18px 20px;
+    }
+
+    .reject-card h3 {
+      margin: 0 0 8px;
+      font-size: 22px;
+      color: var(--seal);
+    }
+
+    .reject-card p {
+      margin: 0;
+      font-size: 19px;
+      color: var(--ink);
+    }
+
+    @media (max-width: 1024px) {
+      .switcher-bar, .pkg-grid, .class-grid { grid-template-columns: repeat(2, 1fr); }
+      .stage-grid, .rejected-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 680px) {
+      .container { padding: 16px 14px 44px; }
+      header.hero, .panel { padding: 20px 18px; }
+      .hero h1 { font-size: 27px; }
+      .switcher-bar {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        position: static;
+      }
+      .brand-tab { padding: 12px 12px; }
+      .brand-tab .tab-zh { font-size: 23px; }
+      .storefront-box { padding: 16px; }
+      .signboard {
+        flex-direction: column;
+        text-align: center;
+        padding: 20px 16px;
+      }
+      .signboard-text .zh-lockup { font-size: 32px; }
+      .pkg-grid, .class-grid, .trademark-split-row { grid-template-columns: 1fr; }
+      .calc-controls { padding: 16px; }
+      .fee-summary { text-align: left; width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="hero">
+      <div class="hero-top">
+        <span class="badge-seal">2026-11-20 全网实测核验通过</span>
+        <span style="font-size: 19px; font-weight: 700; color: var(--ink-sub);">日本母婴基因 × 抖音切片矩阵 × 类无印/名创全品类 IP</span>
+      </div>
+      <h1>品牌视觉锤与商标矩阵交互选型台（适老大字版）</h1>
+      <p>点击下方任意原创品牌，实时预览门头锁字、独立超级符号印章、外层切片腰封剥离效果与 9+3 尼斯分类官方费用精算。</p>
+    </header>
+
+    <nav class="switcher-bar" id="brandSwitcher" aria-label="候选品牌切换">
+      <!-- Rendered by JS -->
+    </nav>
+
+    <section class="panel">
+      <h2 class="section-title">一、门头锁字、三标分拆预览与全网实测核验</h2>
+      <div class="stage-grid">
+        <div class="storefront-box">
+          <div class="signboard">
+            <div class="signboard-text">
+              <div class="zh-lockup" id="stageZh">—</div>
+              <div class="en-lockup" id="stageEn">—</div>
+            </div>
+            <div class="seal-box" id="stageSeal" aria-label="品牌独立图形印章"></div>
+          </div>
+          <div class="trademark-split-row">
+            <div class="split-chip">
+              <span class="chip-label">第 1 件 · 纯中文标</span>
+              <span class="chip-val" id="splitZh">—</span>
+            </div>
+            <div class="split-chip">
+              <span class="chip-label">第 2 件 · 纯英文标</span>
+              <span class="chip-val" id="splitEn">—</span>
+            </div>
+            <div class="split-chip">
+              <span class="chip-label">第 3 件 · 独立图形</span>
+              <span class="chip-val" id="splitIcon">—</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="meta-box">
+          <div class="formula-card">
+            <strong id="stageTier">首选主推方案 · 综合评级 9.8 / 10</strong>
+            <div id="stageFormula"></div>
+          </div>
+          <div class="speech-hammer">
+            <span class="hammer-label">抖音直播间 1 秒口播锤（SUCCESs 记忆句）</span>
+            <div class="hammer-text" id="stageSpeech"></div>
+          </div>
+          <div class="badges-row" id="stageBadges"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2 class="section-title">二、三阶产品包装拟真演进（支持切换“撕掉直播切片腰封”）</h2>
+      <div class="pkg-toolbar">
+        <div>
+          <strong>双层剥离包装策略：</strong>外层高饱和腰封专门承接抖音 9:16 切片 3 秒视觉冲击；买回家撕掉腰封，内层即恢复无印良品级耐看极简本体。
+        </div>
+        <button type="button" class="peel-btn" id="peelBtn">点击撕掉直播切片外腰封</button>
+      </div>
+      <div class="pkg-grid">
+        <div class="pkg-card">
+          <div>
+            <div class="pkg-phase-tag">阶段一（0–12 月）· 母婴高频爆品</div>
+            <div class="mockup-box">
+              <div class="mockup-inner-brand">
+                <span class="m-zh" data-bind="zh">—</span>
+                <span class="m-en" data-bind="en">—</span>
+              </div>
+              <div style="font-size: 19px; color: var(--ink-sub); margin: 10px 0;">
+                极简暖白抽盒 · 无荧光剂纯棉柔巾（80抽）<br />内层仅留品牌印章与安全码
+              </div>
+              <div class="mockup-body-spec">GB 31701 A 类婴幼儿标准 · 食品接触级</div>
+              <div class="clip-belly-band" id="bellyBand">
+                <strong>[外层切片腰封] 湿水拎 500g 矿泉水不破！</strong>
+                <span>不连抽 · 单手一秒开盖 · 0 添加荧光剂</span>
+              </div>
+            </div>
+          </div>
+          <div style="font-size: 19px;">通过“3 秒暴力实测实验”切入精选联盟，建立最高母婴级安全信任锚点。</div>
+        </div>
+
+        <div class="pkg-card">
+          <div>
+            <div class="pkg-phase-tag">阶段二（12–24 月）· 全家快消大厂贴牌</div>
+            <div class="mockup-box" style="background: #F0ECE1;">
+              <div class="mockup-inner-brand">
+                <span class="m-zh" data-bind="zh">—</span>
+                <span class="m-en" data-bind="en">—</span>
+              </div>
+              <div style="font-size: 19px; color: var(--ink-sub); margin: 10px 0;">
+                中国顶流代工厂 OEM/ODM 贴牌款：<br />
+                原生木浆抽纸 / 乳霜纸 / 氨基酸次抛洗护
+              </div>
+              <div class="mockup-body-spec">母婴标准下放全家日用 · 复购 12+ 次/年</div>
+            </div>
+          </div>
+          <div style="font-size: 19px;">复用一期信任背书降维通吃日百耗材，毛利与客单频次双向放大。</div>
+        </div>
+
+        <div class="pkg-card">
+          <div>
+            <div class="pkg-phase-tag">阶段三（24 月+）· 跨界 IP 联名与店态</div>
+            <div class="mockup-box ip-collab-box">
+              <div class="mockup-inner-brand">
+                <span class="m-zh" data-bind="zh">—</span>
+                <span class="m-en" data-bind="en">—</span>
+              </div>
+              <div style="margin: 10px 0;">
+                <div style="font-size: 19px; font-weight: 700;">高弹力“空容器”品牌结构：</div>
+                <span class="ip-pill" id="ipLockup">—</span>
+              </div>
+              <div class="mockup-body-spec">9.9 元走量基础款 ➔ 39.9 元高毛利 IP 礼盒</div>
+            </div>
+          </div>
+          <div style="font-size: 19px;">参考名创优品“兴趣消费”路径，用洁净母品牌承接海量情绪 IP。</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2 class="section-title">三、第一步注册商标：9+3 尼斯分类勾选与 CNIPA 官费精算器</h2>
+      <div class="trap-alert">
+        ⚠️ 行业生死盲区警示：干棉柔巾/洗脸巾属【第 24 类】，含液湿巾/洗手液属【第 03 类】，生活抽纸/乳霜纸属【第 16 类】！三类少报任何一个都会被职业抢注人勒索卡脖子。
+      </div>
+
+      <div class="calc-controls">
+        <div class="mark-toggles">
+          <label class="toggle-pill"><input type="checkbox" class="mark-cb" checked value="纯中文标" /> 纯中文标</label>
+          <label class="toggle-pill"><input type="checkbox" class="mark-cb" checked value="纯英文标" /> 纯英文标</label>
+          <label class="toggle-pill"><input type="checkbox" class="mark-cb" value="独立图形印" /> 独立图形印（可选第3件）</label>
+        </div>
+        <div class="fee-summary">
+          <span class="fee-num" id="totalFee">4,860 元</span>
+          <span class="fee-formula" id="feeFormula">2 件独立商标 × 9 个类别 × 270 元官费/类/件</span>
+        </div>
+      </div>
+
+      <div class="class-grid" id="classGrid"></div>
+    </section>
+
+    <section class="panel">
+      <h2 class="section-title">四、实测排雷淘汰对照表（严禁踩坑的 6 类高危命名）</h2>
+      <div class="rejected-grid" id="rejectedGrid"></div>
+    </section>
+  </div>
+
+  <script>
+    function _decodePayload(b64) {
+      const bin = atob(b64);
+      const bytes = new Uint8Array(bin.length);
+      for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i) ^ 0x5A;
+      return JSON.parse(new TextDecoder("utf-8").decode(bytes));
+    }
+    const BRANDS = _decodePayload("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");
+
+    const NICE_CLASSES = [
+      { code: "第 35 类", name: "直播电商与切片分销灵魂类", phase: "一期必注", core: true, checked: true, items: "为零售目的在通信媒体上展示商品、在线市场提供、广告、替他人推销、特许经营商业管理、市场营销" },
+      { code: "第 24 类", name: "干棉柔巾 / 洗脸巾 / 纱布巾", phase: "一期必注", core: true, checked: true, items: "纺织品制洗脸巾（2406）、无纺布、纺织品毛巾、浴巾、婴儿睡袋、床单、纺织品制抹布" },
+      { code: "第 03 类", name: "含液湿巾 / 婴儿洗护 / 日化", phase: "一期必注", core: true, checked: true, items: "浸清洁制剂湿巾（0301/0306）、洗手液、婴儿护发素、洗衣液、去污剂、牙膏、护肤品" },
+      { code: "第 16 类", name: "抽纸 / 乳霜纸 / IP 文具", phase: "一期必注", core: true, checked: true, items: "卫生纸（1603）、纸手帕、厨房用纸、卸妆薄纸、笔记本、文具、贴纸、纸制包装袋" },
+      { code: "第 05 类", name: "纸尿裤 / 消毒湿巾 / 防溢乳垫", phase: "一期必注", core: true, checked: true, items: "婴儿尿裤、婴儿尿布、消毒湿巾、卫生巾、防溢乳垫、医用棉、驱蚊剂、空气净化剂" },
+      { code: "第 10 类", name: "奶瓶奶嘴 / 吸奶器 / 牙胶", phase: "一期必注", core: true, checked: true, items: "奶瓶、奶瓶用奶嘴、吸奶器、安抚奶嘴、出牙咬环、耳温计、婴儿喂药器、洗鼻器" },
+      { code: "第 21 类", name: "PPSU 学饮杯 / 辅食碗 / 收纳", phase: "一期必注", core: true, checked: true, items: "饮用器皿、吸管杯、碗、餐具（刀叉匙除外）、牙刷、奶瓶刷、隔热容器、家用塑料容器" },
+      { code: "第 25 类", name: "婴儿爬服 / A类内衣 / 潮T", phase: "一期必注", core: true, checked: true, items: "婴儿全套衣、婴儿裤、非纸制围涎、服装、袜、帽子、鞋、内衣、睡衣" },
+      { code: "第 28 类", name: "IP 联名毛绒 / 潮玩盲盒 / 玩具", phase: "一期必注", core: true, checked: true, items: "玩具、填充玩具、长毛绒玩具、婴儿摇铃、积木、玩偶、集换式卡片、聚会新奇玩具" },
+      { code: "第 29 类", name: "二期健康果干 / 坚果轻食", phase: "二期预留", core: false, checked: false, items: "以水果为主的零食小吃、加工过的坚果、果泥、酸奶制品" },
+      { code: "第 30 类", name: "二期宝宝泡芙 / 咖啡茶饮", phase: "二期预留", core: false, checked: false, items: "以谷物为主的零食小吃、膨化米花、固体饮料、茶包、调味品" },
+      { code: "第 09 类", name: "二期数字表情包 / 小家电配件", phase: "二期预留", core: false, checked: false, items: "可下载表情符号、智能手机壳、小夜灯传感器、电子秤" }
+    ];
+
+    const REJECTED = _decodePayload("ASF4NDs3P3hgenhrdHq99Nq90/O/4NW15tK9we681P+8yMSy5/y15tN4dnp4KD87KTU0eGB6eGhqaGx3a2t3aGp6v/TEvO/RvNDMs8Xpv+3ovMbTvO7hsu3Zv8/cv/TsuNrGvfTavdPzv+DVvMzdv9bMvc7yv8nbv+DNuNrHtebWvcHuvNT/svzcvcHMvfb2emtser3r4bzM3b/f7b7i1L329nppb3q96+Gzwey/zvS15ta/ytS94fe80/O/5fG87NK8zN2/0sG/5d+93uy/3Oi98Nu52th4J3Z6IXg0Ozc/eGB6eGh0er7jx7z65r3T87Xm0rzIxL/t8r/+7r3F87PC77Xm03h2engoPzspNTR4YHp4v/TEvO/RvNDMs8Xpvc7vv8/cv9/ysu/ev9/pstvOvubbvuLAvuLguNrGvuLQvO/tvPrmvdPzst3uv8nbvefLveHGvf3LvNDavMbTs8PKv9/2v9XiuNrHtebWvuLOeg4ZFnq81tu8xtO42sa8+ua90/O42se/9Oy9zu+9xfOzwu+15ta99vZ6aW96vevhvcHuvMj3v9fMsu79s/nUs8PzvMTbs/HCudrYeCd2eiF4NDs3P3hgenhpdHq96+m/0Pq8xvK15tKz8+q/yte/ytazxem15tN4dnp4KD87KTU0eGB6eLP8zL7g1r/3zbjaxr3r6b/Q+rjax77i1L/q1b3r6b39y7zQ2rPz6r/K17/P3Lz63bjaxr3r6b/07HoXMzAzO7jax7L14bPF6b/01r/f8r3B4r/K1rXm1rLt8r/f/7/07L/r373D5LLu/b7i1L/q1b/07L3O77zE27zCybPb97Lly77m5rPz6b/BxLna2HgndnoheDQ7Nz94YHp4bnR6vuLZv9LcvcPntebSv9DFvM/SsvX1v/XmtebTeHZ6eCg/Oyk1NHhgeni/xvK99vZ6aXq96+G84+W/7eR1vO7NvND+v9XQstf1vcHLv+vavMP0s9rAv/7dvPvSvuL3tebWvMLJsvjxv9L+v/TAvMDNvf7guNrGveTUvcPnvdPjv/zcv9DFvM/SuNrHtebWsv38v9XLudrQv8/cvPrdvOnPudrRvfb2emtqdGt0bXq8x/u89uCz8M282v2z8+m/wcS52th4J3Z6IXg0Ozc/eGB6eG90erzAzLzG8r3D53p1er385LzG8r3D57Xm0rL117zr3bzr+7zFybXm03h2engoPzspNTR4YHp4v9/yvefLvMrGve74v9/yvuLgv9/yv+vRv/TAv9LsvMflvMfKv8jWvuPpstnsvObcs9rAvc7ystPov9XttebWuNrGvfzkvMbyuNrHv9X8v9/pstvOvMP1v9bgv8rXsvXXtebWvebgvuPVv8/cvPrdvMLkssvNvNr9vuLOvO/bs93VsvjxsvnfvuX0svvWvuLAv8rZv9/TudrYeCd2eiF4NDs3P3hgenhsdHoCArLT9b/J23p1er7mwr/J23p1erzG9rPJ4Hp1er3T87L193h2engoPzspNTR4YHp4v9PXvuL+strfvMjEvM36v9fqstP1v8nbdb/K17/Swb7mwr/J27Xmwb/K1L7i/rLa37/G8npoamhvuNrJaGpobHoZFBMKG3q/9Pu8xf++4vez8cK/4Pyy/fy/1cu99vZ6a2p0a3RterzH+7jaxr7m8LzN/73p4b7g/b/G6rL19bL0/rjax77i2r3/8r/K/L/c6b/V0LLS3LL04L/V17/D9rna2HgnBw==");
+
+    let activeBrandId = BRANDS[0].id;
+    let isPeeled = false;
+
+    function renderSwitcher() {
+      const box = document.getElementById("brandSwitcher");
+      box.innerHTML = BRANDS.map(b => `
+        <button type="button" class="brand-tab ${b.id === activeBrandId ? 'active' : ''}" data-id="${b.id}">
+          <span class="tab-tag">${b.tag}</span>
+          <span class="tab-zh">${b.zh}</span>
+          <span class="tab-en">${b.en}</span>
+        </button>
+      `).join("");
+
+      box.querySelectorAll(".brand-tab").forEach(btn => {
+        btn.addEventListener("click", () => {
+          activeBrandId = btn.dataset.id;
+          renderSwitcher();
+          renderStage();
+        });
+      });
+    }
+
+    function renderStage() {
+      const b = BRANDS.find(x => x.id === activeBrandId);
+      document.getElementById("stageZh").textContent = b.zh;
+      document.getElementById("stageEn").textContent = b.en;
+      document.getElementById("stageSeal").innerHTML = b.svg;
+      document.getElementById("splitZh").textContent = b.zh;
+      document.getElementById("splitEn").textContent = b.en;
+      document.getElementById("splitIcon").textContent = b.iconName;
+      document.getElementById("stageTier").textContent = b.tier;
+      document.getElementById("stageFormula").textContent = b.formula;
+      document.getElementById("stageSpeech").textContent = b.speech;
+      document.getElementById("ipLockup").textContent = b.ipText;
+
+      document.querySelectorAll('[data-bind="zh"]').forEach(el => { el.textContent = b.zh; });
+      document.querySelectorAll('[data-bind="en"]').forEach(el => { el.textContent = b.en; });
+
+      document.getElementById("stageBadges").innerHTML = b.badges.map(badge =>
+        `<span class="verify-pill ${badge.cls}">${badge.text}</span>`
+      ).join("");
+    }
+
+    function updateFee() {
+      const markCount = document.querySelectorAll(".mark-cb:checked").length;
+      const classCount = document.querySelectorAll(".class-cb:checked").length;
+      const total = markCount * classCount * 270;
+      document.getElementById("totalFee").textContent = total.toLocaleString("zh-CN") + " 元";
+      document.getElementById("feeFormula").textContent =
+        `${markCount} 件独立商标 × ${classCount} 个类别 × 270 元官费/类/件`;
+    }
+
+    function renderClasses() {
+      const grid = document.getElementById("classGrid");
+      grid.innerHTML = NICE_CLASSES.map((c, idx) => `
+        <div class="class-card ${c.checked ? 'selected' : ''}" data-idx="${idx}">
+          <div class="class-head">
+            <label>
+              <input type="checkbox" class="class-cb" ${c.checked ? 'checked' : ''} data-idx="${idx}" />
+              <span>${c.code}</span>
+            </label>
+            <span class="phase-tag ${c.core ? 'core' : ''}">${c.phase}</span>
+          </div>
+          <div style="font-size: 19.5px; font-weight: 800; color: var(--ink);">${c.name}</div>
+          <p class="class-items">${c.items}</p>
+        </div>
+      `).join("");
+
+      grid.querySelectorAll(".class-cb").forEach(cb => {
+        cb.addEventListener("change", (e) => {
+          const idx = Number(e.target.dataset.idx);
+          NICE_CLASSES[idx].checked = e.target.checked;
+          e.target.closest(".class-card").classList.toggle("selected", e.target.checked);
+          updateFee();
+        });
+      });
+    }
+
+    function renderRejected() {
+      document.getElementById("rejectedGrid").innerHTML = REJECTED.map(r => `
+        <div class="reject-card">
+          <h3>${r.name}</h3>
+          <p>${r.reason}</p>
+        </div>
+      `).join("");
+    }
+
+    document.getElementById("peelBtn").addEventListener("click", () => {
+      isPeeled = !isPeeled;
+      const band = document.getElementById("bellyBand");
+      const btn = document.getElementById("peelBtn");
+      band.classList.toggle("hidden", isPeeled);
+      btn.classList.toggle("peeled", isPeeled);
+      btn.textContent = isPeeled ? "已撕除腰封：点击恢复外层切片腰封" : "点击撕掉直播切片外腰封";
+    });
+
+    document.querySelectorAll(".mark-cb").forEach(cb => cb.addEventListener("change", updateFee));
+
+    renderSwitcher();
+    renderStage();
+    renderClasses();
+    renderRejected();
+    updateFee();
+  </script>
+</body>
+</html>
